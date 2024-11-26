@@ -1,8 +1,45 @@
+using Microsoft.EntityFrameworkCore;
+using RRHH.Api;
+using RRHH.Application.Interfaces;
+using RRHH.Application.Mapper;
+using RRHH.Application.Services;
+using RRHH.Domain.Interfaces;
+using RRHH.Infrastructure.Repositories;
+using RRHH.Infrastructure.UnitOfWork;
+using Serilog;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configura Serilog usando el archivo de configuración
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration) // Lee la configuración de appsettings.json
+    .CreateLogger();
 
-builder.Services.AddControllers();
+builder.Host.UseSerilog(); // Usa Serilog para el registro de logs
+
+builder.Services.AddDbContext<ApprrhhApiContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SQL")));
+
+// Add services to the container.
+builder.Services.AddScoped<EmployeesMapper>();
+builder.Services.AddScoped<DepartmentMapper>();
+
+builder.Services.AddScoped<IEmployeesService, EmployeesService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IEmployeesRepository<Employee>, EmployeesReposity<Employee>>();
+builder.Services.AddScoped<IDepartmentRepository<Department>, DepartmentRepository<Department>>();
+
+// Configura la serialización JSON para manejar referencias cíclicas
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve; // Maneja las referencias cíclicas
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
