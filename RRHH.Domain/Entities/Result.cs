@@ -11,5 +11,6 @@ namespace RRHH.Domain.Entities
         public string Text { get; set; }
         public string Error { get; set; }
         public object GenericObject { get; set; }
+        public bool IsSuccess { get; set; }
     }
 }

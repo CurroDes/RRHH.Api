@@ -1,4 +1,4 @@
-﻿
+﻿using RRHH.Application.DTOs;
 using RRHH.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RRHH.Domain.Interfaces
+namespace RRHH.Application.Interfaces
 {
-    public interface IEmployeesRepository<T> where T : Employee
+    public interface ILeaveService
     {
-        Task AddEmployeesAsync(T Employees);
+        Task<Result> ValidateLeaveOverlap(LeaveDTO l);
     }
 }

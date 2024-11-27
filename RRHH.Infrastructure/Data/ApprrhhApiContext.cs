@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using RRHH.Domain.Entities;
 
 namespace RRHH.Api;
 

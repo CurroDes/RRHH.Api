@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace RRHH.Infrastructure.Repositories
 {
-    public class EmployeesReposity<T> : IEmployeesRepository<T> where T : Employee
+    public class LeaveRepository<T> : ILeaveRepository<T> where T : Leaf
     {
         private readonly ApprrhhApiContext _context;
-        public EmployeesReposity(ApprrhhApiContext context)
+        public LeaveRepository(ApprrhhApiContext context)
         {
             _context = context;
         }
 
-        public async Task AddEmployeesAsync(T Employees)
+        public async Task AddLeaveAsync(T leave)
         {
-            await _context.AddAsync(Employees);
+            await _context.AddAsync(leave);
         }
     }
 }

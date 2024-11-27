@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RRHH.Api;
+namespace RRHH.Domain.Entities;
 
-public partial class Employee
+public class Employee
 {
     public int Id { get; set; }
 

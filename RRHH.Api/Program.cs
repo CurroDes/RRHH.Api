@@ -3,6 +3,7 @@ using RRHH.Api;
 using RRHH.Application.Interfaces;
 using RRHH.Application.Mapper;
 using RRHH.Application.Services;
+using RRHH.Domain.Entities;
 using RRHH.Domain.Interfaces;
 using RRHH.Infrastructure.Repositories;
 using RRHH.Infrastructure.UnitOfWork;
@@ -25,13 +26,17 @@ builder.Services.AddDbContext<ApprrhhApiContext>(options =>
 // Add services to the container.
 builder.Services.AddScoped<EmployeesMapper>();
 builder.Services.AddScoped<DepartmentMapper>();
+builder.Services.AddScoped <LeaveMapper>();
 
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<ILeaveService, LeavesService>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IEmployeesRepository<Employee>, EmployeesReposity<Employee>>();
 builder.Services.AddScoped<IDepartmentRepository<Department>, DepartmentRepository<Department>>();
+builder.Services.AddScoped<ILeaveRepository<Leaf>, LeaveRepository<Leaf>>();
 
 // Configura la serialización JSON para manejar referencias cíclicas
 builder.Services.AddControllers()

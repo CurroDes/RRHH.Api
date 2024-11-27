@@ -1,4 +1,5 @@
-﻿using RRHH.Api;
+﻿using Microsoft.Extensions.Logging;
+using RRHH.Api;
 using RRHH.Application.DTOs;
 using RRHH.Application.Interfaces;
 using RRHH.Application.Mapper;
@@ -19,12 +20,14 @@ namespace RRHH.Application.Services
         private readonly EmployeesMapper _employeesMapper;
         private readonly IEmployeesRepository<Employee> _employeesRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public EmployeesService(ApprrhhApiContext context, EmployeesMapper employeesMapper, IEmployeesRepository<Employee> employeesRepository, IUnitOfWork unitOfWork)
+        private readonly ILogger<EmployeesService> _logger;
+        public EmployeesService(ApprrhhApiContext context, EmployeesMapper employeesMapper, IEmployeesRepository<Employee> employeesRepository, IUnitOfWork unitOfWork, ILogger<EmployeesService> logger)
         {
             _context = context;
             _employeesMapper = employeesMapper;
             _employeesRepository = employeesRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<Result> PostEmployeesService(EmployeesDTO e)

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RRHH.Api;
+namespace RRHH.Domain.Entities;
 
 public partial class PerformanceReview
 {

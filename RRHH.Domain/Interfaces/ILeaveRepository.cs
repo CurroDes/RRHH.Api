@@ -1,5 +1,4 @@
-﻿
-using RRHH.Domain.Entities;
+﻿using RRHH.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace RRHH.Domain.Interfaces
 {
-    public interface IEmployeesRepository<T> where T : Employee
+    public interface ILeaveRepository<T> where T : Leaf
     {
-        Task AddEmployeesAsync(T Employees);
+        Task AddLeaveAsync(T leave);
     }
 }

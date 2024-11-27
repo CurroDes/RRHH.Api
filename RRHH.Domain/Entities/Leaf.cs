@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RRHH.Api;
+namespace RRHH.Domain.Entities;
 
 public partial class Leaf
 {
@@ -18,6 +18,8 @@ public partial class Leaf
     public string? Reason { get; set; }
 
     public string? Status { get; set; }
+
+    public int? ApproverId { get; set; }
 
     public virtual Employee? Employee { get; set; }
 }
