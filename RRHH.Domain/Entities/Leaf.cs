@@ -21,5 +21,7 @@ public partial class Leaf
 
     public int? ApproverId { get; set; }
 
+    public string? Text { get; set; }
+
     public virtual Employee? Employee { get; set; }
 }

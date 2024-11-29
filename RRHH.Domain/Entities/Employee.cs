@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RRHH.Domain.Entities;
 
-public class Employee
+public partial class Employee
 {
     public int Id { get; set; }
 

@@ -26,7 +26,7 @@ builder.Services.AddDbContext<ApprrhhApiContext>(options =>
 // Add services to the container.
 builder.Services.AddScoped<EmployeesMapper>();
 builder.Services.AddScoped<DepartmentMapper>();
-builder.Services.AddScoped <LeaveMapper>();
+builder.Services.AddScoped<LeaveMapper>();
 
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();

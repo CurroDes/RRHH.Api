@@ -21,7 +21,10 @@ namespace RRHH.Application.Mapper
                 EmployeeId = l.EmployeeId,
                 StartDate = l.StartDate,
                 EndDate = l.EndDate,
+                LeaveType = l.LeaveType,
                 Reason = l.Reason,
+                Status = l.Status,
+                Text = l.Text
             };
         }
     }
