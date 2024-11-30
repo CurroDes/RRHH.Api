@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using RRHH.Api;
 using RRHH.Application.DTOs;
 using RRHH.Application.Interfaces;
@@ -27,6 +28,39 @@ namespace RRHH.Application.Services
             _leaveRepository = leaveRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
+        }
+
+        public async Task<Result> GetLeavePending()
+        {
+            Result result = new Result();
+
+            try
+            {
+                result.IsSuccess = true;
+                //TODO: Crear un repository en el cual obtengamos una lista de solicitudes que estén pendiente
+                var leave = await _leaveRepository.PendingLeave();
+
+                if (leave == null || leave.Any())
+                {
+                    result.IsSuccess = false;
+                    result.Error = "Error al recibir lista de peteciones pendientes por aprobar";
+                    _logger.LogError(result.Error.ToString());
+
+                    return result;
+                }
+
+                result.GenericObject = leave;
+                result.Text = "Se ha obtenido la lista de solicitudes pendiente con éxito";
+                _logger.LogInformation(result.Text.ToString());
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Error = "Error al recibir lista de peteciones pendientes por aprobar";
+                _logger.LogError(result.Error.ToString());
+            }
+
+            return result;
         }
 
         public async Task<Result> ValidateLeaveOverlap(LeaveDTO l)

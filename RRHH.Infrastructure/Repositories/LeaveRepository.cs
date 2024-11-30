@@ -1,4 +1,5 @@
-﻿using RRHH.Api;
+﻿using Microsoft.EntityFrameworkCore;
+using RRHH.Api;
 using RRHH.Domain.Entities;
 using RRHH.Domain.Interfaces;
 using System;
@@ -20,6 +21,13 @@ namespace RRHH.Infrastructure.Repositories
         public async Task AddLeaveAsync(T leave)
         {
             await _context.AddAsync(leave);
+        }
+
+        public async Task<List<Leaf>> PendingLeave()
+        {
+            return await _context.Leaves
+                .Where(l => l.Status == "Pending")
+                .ToListAsync();
         }
     }
 }

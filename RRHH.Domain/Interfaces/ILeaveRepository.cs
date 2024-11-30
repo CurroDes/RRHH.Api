@@ -10,5 +10,6 @@ namespace RRHH.Domain.Interfaces
     public interface ILeaveRepository<T> where T : Leaf
     {
         Task AddLeaveAsync(T leave);
+        Task<List<Leaf>> PendingLeave();
     }
 }

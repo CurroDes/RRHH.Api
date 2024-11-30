@@ -31,6 +31,7 @@ builder.Services.AddScoped<LeaveMapper>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ILeaveService, LeavesService>();
+builder.Services.AddScoped<CheckDaysService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

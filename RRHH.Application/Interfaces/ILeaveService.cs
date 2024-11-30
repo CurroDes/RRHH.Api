@@ -11,5 +11,6 @@ namespace RRHH.Application.Interfaces
     public interface ILeaveService
     {
         Task<Result> ValidateLeaveOverlap(LeaveDTO l);
+        Task<Result> GetLeavePending();
     }
 }

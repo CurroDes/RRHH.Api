@@ -16,6 +16,30 @@ namespace RRHH.Api.Controllers
             _leaveService = leaveService;
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> GetLeaves()
+        {
+            Result result = new Result();
+
+            //Tenemos que obtener una lista de peticiones/solicitudes pendientes por parte de los empleados (Seguir pinrcipios SOLID)
+            try
+            {
+                result = await _leaveService.GetLeavePending();
+
+                if (!result.IsSuccess)
+                {
+                    return StatusCode(500, result.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+
+            return Ok(result);
+        }
+
         public async Task<IActionResult> PostLeave(LeaveDTO l)
         {
             Result result = new Result();
