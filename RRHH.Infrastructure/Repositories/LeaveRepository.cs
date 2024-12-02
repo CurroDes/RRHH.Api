@@ -29,5 +29,20 @@ namespace RRHH.Infrastructure.Repositories
                 .Where(l => l.Status == "Pending")
                 .ToListAsync();
         }
+
+
+        public async Task<T> LeaveId(int id)
+        {
+            return await _context.Set<T>()
+                .Where(l => l.EmployeeId == id)
+                .FirstOrDefaultAsync();
+        }
+
+        //Añadimos dentro de leave la modificación:
+
+        public async Task ModifyLeave(T leave)
+        {
+            _context.Entry(leave).State = EntityState.Modified;
+        }
     }
 }

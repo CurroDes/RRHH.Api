@@ -40,6 +40,7 @@ namespace RRHH.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
         public async Task<IActionResult> PostLeave(LeaveDTO l)
         {
             Result result = new Result();
@@ -60,5 +61,50 @@ namespace RRHH.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut("{id}/Aprroved")]
+        public async Task<IActionResult> PutLeaveApproved(int id, LeaveDTO l)
+        {
+            Result result = new Result();
+
+            try
+            {
+                result = await _leaveService.ValidateLeaveApproved(id, l);
+
+                if (!result.IsSuccess)
+                {
+                    return StatusCode(500, result.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("{id}/Cancel")]
+        public async Task<IActionResult> PutLeaveCancel(int id, LeaveDTO l)
+        {
+            Result result = new Result();
+
+            try
+            {
+                result = await _leaveService.PutLeaveCancel(id, l);
+
+                if (!result.IsSuccess)
+                {
+                    return StatusCode(500, result.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+
+            return Ok(result);
+        }
     }
+
 }

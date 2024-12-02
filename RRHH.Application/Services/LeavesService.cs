@@ -96,5 +96,88 @@ namespace RRHH.Application.Services
 
             return result;
         }
+
+        public async Task<Result> ValidateLeaveApproved(int id, LeaveDTO l)
+        {
+            Result result = new Result();
+
+            try
+            {
+                result.IsSuccess = true;
+
+                var leaveId = await _leaveRepository.LeaveId(id);
+
+                if (leaveId == null)
+                {
+                    result.IsSuccess = false;
+                    result.Error = "Error al intentar aceptar la solicitud, no es el mismo trabajador. Por favor, revise la petición";
+                    _logger.LogError(result.Error.ToString());
+                    return result;
+                }
+                
+                //Días solicitados, están ocupados?
+
+                //Modificar el status a "Approved"
+                leaveId = _leaveMapper.MapToModifyApproved(l, leaveId);
+                //Modificar el status a "Approved" in bbdd
+                await _leaveRepository.ModifyLeave(leaveId);
+
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
+
+                result.Text = $"Se ha modificado con éxito la solicitud del empelado con id: {l.EmployeeId}";
+                _logger.LogInformation(result.Text.ToString());
+
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Error = "Error al intentar modificar el estado de la solicitud";
+                _logger.LogError(result.Error.ToString());
+
+                await _unitOfWork.RollbackAsync();
+            }
+            return result;
+        }
+
+        public async Task<Result> PutLeaveCancel(int id, LeaveDTO l)
+        {
+            Result result = new Result();
+
+            try
+            {
+                result.IsSuccess = true;
+
+                var leaveCancel = await _leaveRepository.LeaveId(id);
+
+                if (leaveCancel == null)
+                {
+                    result.IsSuccess = false;
+                    result.Error = "Ha habido un error al intentar cancelar la solicitud del empleado, por favor, revise la petición";
+                    _logger.LogError(result.Error.ToString());
+
+                    return result;
+                }
+
+                //mapeamos el nuevo status
+                leaveCancel = _leaveMapper.MapToModifyCancel(l, leaveCancel);
+                await _leaveRepository.ModifyLeave(leaveCancel);
+                await _unitOfWork.SaveChangesAsync();
+                
+                await _unitOfWork.CommitAsync();
+                result.Text = $"Se ha modificado la solicitud a cancelada correctamente para el empleado con id: {l.EmployeeId}";
+                _logger.LogInformation(result.Text.ToString());
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Error = "Ha habido un error al intentar cancelar la solicitud del empleado, por favor, revise la petición";
+                _logger.LogError(result.Error.ToString());
+
+                return result;
+            }
+
+            return result;
+        }
     }
 }

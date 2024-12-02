@@ -12,5 +12,7 @@ namespace RRHH.Application.Interfaces
     {
         Task<Result> ValidateLeaveOverlap(LeaveDTO l);
         Task<Result> GetLeavePending();
+        Task<Result> ValidateLeaveApproved(int id, LeaveDTO l);
+        Task<Result> PutLeaveCancel(int id, LeaveDTO l);
     }
 }

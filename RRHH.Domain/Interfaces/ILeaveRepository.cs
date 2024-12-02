@@ -11,5 +11,7 @@ namespace RRHH.Domain.Interfaces
     {
         Task AddLeaveAsync(T leave);
         Task<List<Leaf>> PendingLeave();
+        Task<T> LeaveId(int id);
+        Task ModifyLeave(T leave);
     }
 }
