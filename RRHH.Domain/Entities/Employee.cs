@@ -19,6 +19,8 @@ public partial class Employee
 
     public int? WorkingHoursId { get; set; }
 
+    public string? Email { get; set; }
+
     public virtual Department? Department { get; set; }
 
     public virtual ICollection<Leaf> Leaves { get; set; } = new List<Leaf>();

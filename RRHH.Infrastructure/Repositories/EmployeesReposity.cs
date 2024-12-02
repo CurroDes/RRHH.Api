@@ -1,4 +1,5 @@
-﻿using RRHH.Api;
+﻿using Microsoft.EntityFrameworkCore;
+using RRHH.Api;
 using RRHH.Domain.Entities;
 using RRHH.Domain.Interfaces;
 using System;
@@ -21,5 +22,6 @@ namespace RRHH.Infrastructure.Repositories
         {
             await _context.AddAsync(Employees);
         }
+
     }
 }

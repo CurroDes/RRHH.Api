@@ -7,7 +7,7 @@ public partial class Leaf
 {
     public int Id { get; set; }
 
-    public int EmployeeId { get; set; }
+    public int? EmployeeId { get; set; }
 
     public DateTime? StartDate { get; set; }
 

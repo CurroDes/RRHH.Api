@@ -47,6 +47,7 @@ public partial class ApprrhhApiContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Employee__3214EC0770E42811");
 
+            entity.Property(e => e.Email).HasMaxLength(55);
             entity.Property(e => e.FirstName).HasMaxLength(500);
             entity.Property(e => e.LastName).HasMaxLength(500);
             entity.Property(e => e.PhoneNumber)

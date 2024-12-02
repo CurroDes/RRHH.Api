@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RRHH.Api;
 using RRHH.Application.DTOs;
 using RRHH.Application.Interfaces;
@@ -50,7 +51,7 @@ namespace RRHH.Application.Services
                 await _unitOfWork.CommitAsync();
 
                 result.Text = "Se ha añadido correctamente el nuevo empleado";
-                //TODO:Añadir _logger Serilog
+                _logger.LogInformation(result.Text.ToString());
             }
             catch (Exception ex)
             {

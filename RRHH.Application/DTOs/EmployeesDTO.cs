@@ -13,6 +13,7 @@ namespace RRHH.Application.DTOs
         public string? LastName { get; set; }
 
         public int? DepartmentId { get; set; }
+        public string Email { get; set; }
 
         public string? Role { get; set; }
 
