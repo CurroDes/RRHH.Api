@@ -53,5 +53,17 @@ namespace RRHH.Application.Mapper
 
             return le;
         }
+
+        public MessageDTO MapToMessageApi(Leaf l, MessageDTO m, Employee e)
+        {
+            m.FirstName = e.FirstName;
+            m.LastName = e.LastName;
+            m.Email = e.Email;
+            m.LeaveType = l.LeaveType;
+            m.Reason = l.Reason;
+            m.Status = l.Status;
+
+            return m;
+        }
     }
 }

@@ -23,5 +23,12 @@ namespace RRHH.Infrastructure.Repositories
             await _context.AddAsync(Employees);
         }
 
+        public async Task<T> GetEmployeeByIdAsync(int id)
+        {
+            return await _context.Set<T>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id);
+                
+        }
     }
 }

@@ -6,6 +6,7 @@ using RRHH.Application.Interfaces;
 using RRHH.Application.Mapper;
 using RRHH.Domain.Entities;
 using RRHH.Domain.Interfaces;
+using RRHH.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +22,18 @@ namespace RRHH.Application.Services
         private readonly ILeaveRepository<Leaf> _leaveRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<LeavesService> _logger;
-        public LeavesService(ApprrhhApiContext context, LeaveMapper leaveMapper, ILeaveRepository<Leaf> leaveRepository, IUnitOfWork unitOfWork, ILogger<LeavesService> logger)
+        private readonly IEmployeesRepository<Employee> _employeesRepository;
+        private readonly IMessageService _messageService;
+        public LeavesService(ApprrhhApiContext context, LeaveMapper leaveMapper, ILeaveRepository<Leaf> leaveRepository, IUnitOfWork unitOfWork, ILogger<LeavesService> logger,
+            IEmployeesRepository<Employee> employeesRepository, IMessageService messageService)
         {
             _context = context;
             _leaveMapper = leaveMapper;
             _leaveRepository = leaveRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _employeesRepository = employeesRepository;
+            _messageService = messageService;
         }
 
         public async Task<Result> GetLeavePending()
@@ -114,7 +120,7 @@ namespace RRHH.Application.Services
                     _logger.LogError(result.Error.ToString());
                     return result;
                 }
-                
+
                 //Días solicitados, están ocupados?
 
                 //Modificar el status a "Approved"
@@ -163,7 +169,31 @@ namespace RRHH.Application.Services
                 leaveCancel = _leaveMapper.MapToModifyCancel(l, leaveCancel);
                 await _leaveRepository.ModifyLeave(leaveCancel);
                 await _unitOfWork.SaveChangesAsync();
-                
+
+                //Mapeamos el mensaje que vamos a enviar a la API.MESSAGE:
+                var employee = await _employeesRepository.GetEmployeeByIdAsync(l.EmployeeId);
+
+
+                if (employee == null)
+                {
+                    result.IsSuccess = false;
+                    result.Error = "No se encontró el empleado asociado a esta solicitud.";
+                    _logger.LogError(result.Error.ToString());
+                    return result;
+                }
+
+                var leaveMessage = _leaveMapper.MapToMessageApi(leaveCancel, new MessageDTO(), employee);
+                //Enviamos el mensaje a API.MESSAGE:
+                var message = await _messageService.MessageApi(leaveMessage);
+
+                if (!message.IsSuccess)
+                {
+                    result.Error = "Error al intentar comunicarse con la API de message";
+                    _logger.LogError(result.Error.ToString());
+                    result.IsSuccess = false;
+                    return result;
+                }
+
                 await _unitOfWork.CommitAsync();
                 result.Text = $"Se ha modificado la solicitud a cancelada correctamente para el empleado con id: {l.EmployeeId}";
                 _logger.LogInformation(result.Text.ToString());

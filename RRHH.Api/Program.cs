@@ -23,15 +23,18 @@ builder.Host.UseSerilog(); // Usa Serilog para el registro de logs
 builder.Services.AddDbContext<ApprrhhApiContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SQL")));
 
+builder.Services.AddHttpClient();
+
 // Add services to the container.
 builder.Services.AddScoped<EmployeesMapper>();
 builder.Services.AddScoped<DepartmentMapper>();
 builder.Services.AddScoped<LeaveMapper>();
+builder.Services.AddScoped<CheckDaysService>();
 
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ILeaveService, LeavesService>();
-builder.Services.AddScoped<CheckDaysService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

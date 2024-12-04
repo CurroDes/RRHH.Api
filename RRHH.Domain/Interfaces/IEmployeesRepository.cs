@@ -11,5 +11,6 @@ namespace RRHH.Domain.Interfaces
     public interface IEmployeesRepository<T> where T : Employee
     {
         Task AddEmployeesAsync(T Employees);
+        Task<T> GetEmployeeByIdAsync(int id);
     }
 }
