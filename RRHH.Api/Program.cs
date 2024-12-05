@@ -33,21 +33,18 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<EmployeesMapper>();
 builder.Services.AddScoped<DepartmentMapper>();
 builder.Services.AddScoped<LeaveMapper>();
-builder.Services.AddScoped<RrhhMapper>();
 builder.Services.AddScoped<CheckDaysService>();
 
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ILeaveService, LeavesService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
-builder.Services.AddScoped<IRrhhService, RrhhService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IEmployeesRepository<Employee>, EmployeesReposity<Employee>>();
 builder.Services.AddScoped<IDepartmentRepository<Department>, DepartmentRepository<Department>>();
 builder.Services.AddScoped<ILeaveRepository<Leaf>, LeaveRepository<Leaf>>();
-builder.Services.AddScoped<IRrhhRepository<Rrhh>, RrhhRepository<Rrhh>>();
 
 
 // JWT

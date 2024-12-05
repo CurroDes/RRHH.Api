@@ -31,6 +31,41 @@ namespace RRHH.Application.Services
             _logger = logger;
         }
 
+        public async Task<Result> GetEmployees()
+        {
+            Result result = new Result();
+
+            try
+            {
+                result.IsSuccess = true;
+
+                var getEmployees = await _employeesRepository.GetAllEmployeesAsync();
+
+                if (getEmployees == null)
+                {
+                    result.IsSuccess = false;
+                    result.Error = "Error al intentar obtener la lista de empleados";
+                    _logger.LogError(result.Error.ToString());
+                    return result;
+                }
+
+                result.GenericObject = getEmployees;
+
+                result.Text = "Éxito al obtener la lista de empleados";
+                _logger.LogInformation(result.Text.ToString());
+
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Error = "Error al intentar obtener la lista de empleados";
+                _logger.LogError(result.Error.ToString(), ex.ToString());
+                return result;
+            }
+
+            return result;
+        }
+
         public async Task<Result> PostEmployeesService(EmployeesDTO e)
         {
             Result result = new Result();

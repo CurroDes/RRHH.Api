@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RRHH.Application.DTOs;
 using RRHH.Domain.Data;
 using RRHH.Domain.Entities;
 using RRHH.Domain.Interfaces;
@@ -23,6 +24,15 @@ namespace RRHH.Infrastructure.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.Id == id);
 
+        }
+
+        public async Task<List<T>> GetAllEmployeesAsync()
+        {
+            return await _context.Set<T>()
+                .Include(e => e.Department)
+                .Include(e => e.Leaves)
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

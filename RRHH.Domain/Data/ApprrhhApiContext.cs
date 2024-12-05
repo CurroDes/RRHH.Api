@@ -24,8 +24,6 @@ public partial class ApprrhhApiContext : DbContext
 
     public virtual DbSet<PerformanceReview> PerformanceReviews { get; set; }
 
-    public virtual DbSet<Rrhh> Rrhhs { get; set; }
-
     public virtual DbSet<TimeTable> TimeTables { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -93,21 +91,6 @@ public partial class ApprrhhApiContext : DbContext
             entity.HasOne(d => d.Employee).WithMany(p => p.PerformanceReviews)
                 .HasForeignKey(d => d.EmployeeId)
                 .HasConstraintName("FK_Performance_Reviews_Employees");
-        });
-
-        modelBuilder.Entity<Rrhh>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__RRHH__3214EC073C7785C1");
-
-            entity.ToTable("RRHH");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(50);
-
-            entity.HasOne(d => d.Department).WithMany(p => p.Rrhhs)
-                .HasForeignKey(d => d.DepartmentId)
-                .HasConstraintName("FK_RRHH_Employees");
         });
 
         modelBuilder.Entity<TimeTable>(entity =>

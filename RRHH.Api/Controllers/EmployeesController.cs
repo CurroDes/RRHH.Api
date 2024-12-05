@@ -23,6 +23,21 @@ namespace RRHH.Api.Controllers
         {
             Result result = new Result();
 
+            try
+            {
+                result = await _employeesService.GetEmployees();
+
+                if (!result.IsSuccess)
+                {
+                    return StatusCode(500, result.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500,ex.ToString());
+
+            }
+
             return Ok(result);
         }
 
