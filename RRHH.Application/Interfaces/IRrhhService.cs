@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RRHH.Application.Interfaces;
 
-public interface IMessageService
+public interface IRrhhService
 {
-    Task<Result> MessageApi(MessageDTO m);
+    Task<Result> PostRrhhService(RrhhDTO r);
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using RRHH.Api;
 using RRHH.Application.DTOs;
 using RRHH.Application.Interfaces;
 using RRHH.Application.Mapper;
+using RRHH.Domain.Data;
 using RRHH.Domain.Entities;
 using RRHH.Domain.Interfaces;
 using System;

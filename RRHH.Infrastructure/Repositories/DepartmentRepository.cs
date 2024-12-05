@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using RRHH.Api;
+using RRHH.Domain.Data;
 using RRHH.Domain.Entities;
 using RRHH.Domain.Interfaces;
 using System;

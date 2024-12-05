@@ -10,6 +10,10 @@ using RRHH.Infrastructure.UnitOfWork;
 using Serilog;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using RRHH.Domain.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,18 +33,37 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<EmployeesMapper>();
 builder.Services.AddScoped<DepartmentMapper>();
 builder.Services.AddScoped<LeaveMapper>();
+builder.Services.AddScoped<RrhhMapper>();
 builder.Services.AddScoped<CheckDaysService>();
 
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ILeaveService, LeavesService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IRrhhService, RrhhService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IEmployeesRepository<Employee>, EmployeesReposity<Employee>>();
 builder.Services.AddScoped<IDepartmentRepository<Department>, DepartmentRepository<Department>>();
 builder.Services.AddScoped<ILeaveRepository<Leaf>, LeaveRepository<Leaf>>();
+builder.Services.AddScoped<IRrhhRepository<Rrhh>, RrhhRepository<Rrhh>>();
+
+
+// JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:ClaveSecreta"]))
+    };
+});
 
 // Configura la serialización JSON para manejar referencias cíclicas
 builder.Services.AddControllers()

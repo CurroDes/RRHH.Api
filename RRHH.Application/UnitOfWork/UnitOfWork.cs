@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using RRHH.Api;
 using RRHH.Application.Interfaces;
+using RRHH.Domain.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

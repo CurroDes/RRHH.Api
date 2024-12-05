@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RRHH.Api;
+using RRHH.Domain.Data;
 using RRHH.Domain.Entities;
 using RRHH.Domain.Interfaces;
 using System;
