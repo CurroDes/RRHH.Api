@@ -152,11 +152,7 @@ namespace RRHH.Application.Services
                     return result;
                 }
 
-                //TODO:Vamos a generar un TOKEN (JWT) a los empleados de RRHH que hagan login y tengan ciertos permisos.
-
                 token = _tokensMapper.MapToTokens(token, a, employees);
-
-                //Vamos a probar antes de crear un repository (PRINCIPIOS SOLID SIEMPRE :) o eso intento jaja)
 
                 await _context.Tokens.AddAsync(token);
                 await _unitOfWork.SaveChangesAsync();
