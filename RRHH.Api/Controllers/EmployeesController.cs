@@ -84,4 +84,26 @@ public class EmployeesController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPost("{id}")]
+    public async Task<IActionResult> LoginEmployees(int id, AuthApiViewModelDTO a)
+    {
+        Result result = new Result();
+
+        try
+        {
+            result = await _employeesService.LoginEmployees(id, a);
+
+            if (!result.IsSuccess)
+            {
+                return StatusCode(500, result.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.ToString());
+        }
+
+        return Ok(result);
+    }
 }

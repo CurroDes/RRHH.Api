@@ -26,6 +26,8 @@ public partial class ApprrhhApiContext : DbContext
 
     public virtual DbSet<TimeTable> TimeTables { get; set; }
 
+    public virtual DbSet<Token> Tokens { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=DESKTOP-4UIV9D8;Initial Catalog=APPRRHH_API;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
@@ -102,6 +104,20 @@ public partial class ApprrhhApiContext : DbContext
             entity.Property(e => e.ScheduleType)
                 .HasMaxLength(500)
                 .HasColumnName("Schedule_Type");
+        });
+
+        modelBuilder.Entity<Token>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Tokens__3214EC07FE0C9A85");
+
+            entity.Property(e => e.CreatedAtToken).HasColumnType("datetime");
+            entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
+            entity.Property(e => e.Token1).HasColumnName("Token");
+
+            entity.HasOne(d => d.Employees).WithMany(p => p.Tokens)
+                .HasForeignKey(d => d.EmployeesId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("Fk_Tokens_Employees");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using RRHH.Domain.Data;
-using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,10 +32,12 @@ builder.Services.AddHttpClient();
 // Add services to the container.
 builder.Services.AddScoped<EmployeesMapper>();
 builder.Services.AddScoped<DepartmentMapper>();
+builder.Services.AddScoped<TokensMapper>();
 builder.Services.AddScoped<LeaveMapper>();
 builder.Services.AddScoped<CheckDaysService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<CryptoService>();
+builder.Services.AddScoped<GenerateTokenService>();
 
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
@@ -48,7 +49,6 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmployeesRepository<Employee>, EmployeesReposity<Employee>>();
 builder.Services.AddScoped<IDepartmentRepository<Department>, DepartmentRepository<Department>>();
 builder.Services.AddScoped<ILeaveRepository<Leaf>, LeaveRepository<Leaf>>();
-
 
 // JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

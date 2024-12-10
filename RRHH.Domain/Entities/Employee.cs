@@ -29,5 +29,7 @@ public partial class Employee
 
     public virtual ICollection<PerformanceReview> PerformanceReviews { get; set; } = new List<PerformanceReview>();
 
+    public virtual ICollection<Token> Tokens { get; set; } = new List<Token>();
+
     public virtual TimeTable? WorkingHours { get; set; }
 }
