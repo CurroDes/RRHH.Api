@@ -21,6 +21,8 @@ public partial class Employee
 
     public string? Email { get; set; }
 
+    public byte[]? Password { get; set; }
+
     public virtual Department? Department { get; set; }
 
     public virtual ICollection<Leaf> Leaves { get; set; } = new List<Leaf>();

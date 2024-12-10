@@ -12,5 +12,6 @@ namespace RRHH.Application.Interfaces
     {
         Task<Result> PostEmployeesService(EmployeesDTO e);
         Task<Result> GetEmployees();
+        Task<Result> PutEmployeesService(int id, EmployeesDTO e);
     }
 }

@@ -43,7 +43,6 @@ public class LeavesService : ILeaveService
         try
         {
             result.IsSuccess = true;
-            //TODO: Crear un repository en el cual obtengamos una lista de solicitudes que estén pendiente
             var leave = await _leaveRepository.PendingLeave();
 
             if (leave == null || leave.Any())

@@ -97,5 +97,62 @@ namespace RRHH.Application.Services
 
             return result;
         }
+
+
+        //TODO: Pendiente logear el personal de RRHH y que obtenga el correspondiente TOKEN de permiso.
+        public async Task<Result> LoginEmployees(EmployeesDTO e)
+        {
+            Result result = new Result();
+
+            try
+            {
+                //var employees = await 
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return result;
+        }
+
+        public async Task<Result> PutEmployeesService(int id, EmployeesDTO e)
+        {
+            Result result = new Result();
+
+            result.IsSuccess = true;
+            try
+            {
+                //Condición para verificar que vamos a modificar el empleado deseado:
+                var employees = await _employeesRepository.GetEmployeeByIdAsync(id);
+
+                if (employees == null)
+                {
+                    result.IsSuccess = false;
+                    result.Error = $"Error al intentar modificar al empleado {e.LastName}";
+                    _logger.LogError(result.Error.ToString());
+                    return result;
+                }
+
+                employees = _employeesMapper.MapToPutEmployees(e, employees);
+
+                await _employeesRepository.ModifyEmployees(employees);
+                await _unitOfWork.SaveChangesAsync();
+
+                await _unitOfWork.CommitAsync();
+
+                result.Text = $"Éxito al modificar al cliente {e.FirstName}{e.LastName}";
+                _logger.LogInformation(result.Text.ToString());
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Error = $"Error al intentar modificar al empleado {e.LastName}";
+                _logger.LogError(result.Error.ToString(), ex.ToString());
+                return result;
+            }
+
+            return result;
+        }
     }
 }
