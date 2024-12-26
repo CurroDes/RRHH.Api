@@ -120,11 +120,9 @@ public class LeavesService : ILeaveService
                 return result;
             }
 
-            //Días solicitados, están ocupados?
 
-            //Modificar el status a "Approved"
             leaveId = _leaveMapper.MapToModifyApproved(l, leaveId);
-            //Modificar el status a "Approved" in bbdd
+
             await _leaveRepository.ModifyLeave(leaveId);
 
             await _unitOfWork.SaveChangesAsync();
