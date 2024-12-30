@@ -10,7 +10,7 @@ namespace RRHH.Application.Interfaces
 {
     public interface IEmailService
     {
-        Task SendEmailAsyncApprovedd(EmployeesDTO e);
+        Task SendEmailAsyncApproved(Employee e);
         Task SendEmailAsyncCancel(EmployeesDTO e);
     }
 }

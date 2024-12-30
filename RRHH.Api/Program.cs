@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using RRHH.Domain.Data;
+using RRHH.Application.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,7 @@ builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ILeaveService, LeavesService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

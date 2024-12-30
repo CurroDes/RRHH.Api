@@ -24,8 +24,9 @@ public class LeavesService : ILeaveService
     private readonly ILogger<LeavesService> _logger;
     private readonly IEmployeesRepository<Employee> _employeesRepository;
     private readonly IMessageService _messageService;
+    private readonly IEmailService _emailService;
     public LeavesService(ApprrhhApiContext context, LeaveMapper leaveMapper, ILeaveRepository<Leaf> leaveRepository, IUnitOfWork unitOfWork, ILogger<LeavesService> logger,
-        IEmployeesRepository<Employee> employeesRepository, IMessageService messageService)
+        IEmployeesRepository<Employee> employeesRepository, IMessageService messageService, IEmailService emailService)
     {
         _context = context;
         _leaveMapper = leaveMapper;
@@ -34,6 +35,7 @@ public class LeavesService : ILeaveService
         _logger = logger;
         _employeesRepository = employeesRepository;
         _messageService = messageService;
+        _emailService = emailService;
     }
 
     public async Task<Result> GetLeavePending()
@@ -45,7 +47,7 @@ public class LeavesService : ILeaveService
             result.IsSuccess = true;
             var leave = await _leaveRepository.PendingLeave();
 
-            if (leave == null || leave.Any())
+            if (leave == null)
             {
                 result.IsSuccess = false;
                 result.Error = "Error al recibir lista de peteciones pendientes por aprobar";
@@ -120,12 +122,26 @@ public class LeavesService : ILeaveService
                 return result;
             }
 
+            await _unitOfWork.SaveChangesAsync();
+
+            //Vamos a preparar el email de confirmación para el empleado:
+
+            var employee = await _employeesRepository.GetEmployeeByIdAsync(l.EmployeeId);
+
+            if (employee == null)
+            {
+                result.IsSuccess = false;
+                result.Error = "No se encontró el empleado asociado a esta solicitud.";
+                _logger.LogError(result.Error.ToString());
+                return result;
+            }
+
+            await _emailService.SendEmailAsyncApproved(employee);
 
             leaveId = _leaveMapper.MapToModifyApproved(l, leaveId);
 
             await _leaveRepository.ModifyLeave(leaveId);
 
-            await _unitOfWork.SaveChangesAsync();
             await _unitOfWork.CommitAsync();
 
             result.Text = $"Se ha modificado con éxito la solicitud del empelado con id: {l.EmployeeId}";
@@ -140,6 +156,7 @@ public class LeavesService : ILeaveService
 
             await _unitOfWork.RollbackAsync();
         }
+
         return result;
     }
 

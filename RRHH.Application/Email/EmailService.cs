@@ -21,7 +21,7 @@ public class EmailService : IEmailService
         _configuration = configuration;
     }
 
-    public async Task SendEmailAsyncApprovedd(EmployeesDTO e)
+    public async Task SendEmailAsyncApproved(Employee e)
     {
         var smtpSettings = _configuration.GetSection("SmtpSettings");
 

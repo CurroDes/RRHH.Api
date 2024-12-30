@@ -34,7 +34,7 @@ namespace RRHH.Infrastructure.Repositories
         public async Task<T> LeaveId(int id)
         {
             return await _context.Set<T>()
-                .Where(l => l.EmployeeId == id)
+                .Where(l => l.Id == id)
                 .FirstOrDefaultAsync();
         }
 

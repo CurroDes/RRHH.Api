@@ -62,7 +62,7 @@ namespace RRHH.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id}/Aprroved")]
+        [HttpPut("{id}/Approved")]
         public async Task<IActionResult> PutLeaveApproved(int id, LeaveDTO l)
         {
             Result result = new Result();
