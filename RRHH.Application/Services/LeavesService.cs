@@ -87,6 +87,18 @@ public class LeavesService : ILeaveService
             await _leaveRepository.AddLeaveAsync(reasonLeave);
             await _unitOfWork.SaveChangesAsync();
 
+            var employee = await _employeesRepository.GetEmployeeByIdAsync(l.EmployeeId);
+
+            if(employee == null)
+            {
+                result.IsSuccess = false;
+                result.Error = "No se encontró el empleado asociado a esta solicitud.";
+                _logger.LogError(result.Error.ToString());
+                return result;
+            }
+
+            await _emailService.SendEmailRequest(employee);
+
             await _unitOfWork.CommitAsync();
 
             result.IsSuccess = true;
@@ -196,15 +208,13 @@ public class LeavesService : ILeaveService
                 return result;
             }
 
-            var leaveMessage = _leaveMapper.MapToMessageApi(leaveCancel, new MessageDTO(), employee);
-            //Enviamos el mensaje a API.MESSAGE:
-            var message = await _messageService.MessageApi(leaveMessage);
+            result = await _emailService.SendEmailAsyncCancel(employee);
 
-            if (!message.IsSuccess)
+            if (!result.IsSuccess)
             {
-                result.Error = "Error al intentar comunicarse con la API de message";
-                _logger.LogError(result.Error.ToString());
                 result.IsSuccess = false;
+                result.Error = $"No se puedo enviar el mensaje al empleado {employee.FirstName} {employee.LastName} con la solicitud cancelada.";
+                _logger.LogError(result.Error.ToString());
                 return result;
             }
 

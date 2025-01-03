@@ -35,7 +35,7 @@ public class EmailService : IEmailService
         var mailMessage = new MailMessage
         {
             From = new MailAddress(smtpSettings["FromEmail"]),
-            Subject = "Solicitud Aceptada",
+            Subject = "RRHH || Solicitud Aceptada",
             Body = $"Estimado {e.FirstName} {e.LastName} su solicitud ha sido estudiada y en este caso aceptada. Gracias por sus servicios.",
             IsBodyHtml = true
         };
@@ -52,7 +52,45 @@ public class EmailService : IEmailService
         }
     }
 
-    public async Task SendEmailAsyncCancel(EmployeesDTO e)
+    public async Task<Result> SendEmailAsyncCancel(Employee e)
+    {
+        Result result = new Result();
+
+        result.IsSuccess = true;
+        var smtpSettings = _configuration.GetSection("SmtpSettings");
+
+        var client = new SmtpClient(smtpSettings["Host"])
+        {
+            Port = int.Parse(smtpSettings["Port"]),
+            Credentials = new NetworkCredential(smtpSettings["Username"], smtpSettings["Password"]),
+            EnableSsl = true
+        };
+
+        var mailMessage = new MailMessage
+        {
+            From = new MailAddress(smtpSettings["FromEmail"]),
+            Subject = "RRHH || Solicitud Cancelada",
+            Body = $"Estimado {e.FirstName} {e.LastName} su solicitud ha sido estudiada y en este caso cancelada. Revise con su Manager las causas. Gracias por su tiempo",
+            IsBodyHtml = true
+        };
+
+        mailMessage.To.Add(e.Email);
+        try
+        {
+            await client.SendMailAsync(mailMessage);
+        }
+        catch (Exception ex)
+        {
+            // Maneja el error de forma apropiada
+            result.IsSuccess = false;
+            return result;
+            throw new InvalidOperationException("Error al enviar el correo electrónico", ex);
+        }
+
+        return result;
+    }
+
+    public async Task SendEmailRequest(Employee e)
     {
         var smtpSettings = _configuration.GetSection("SmtpSettings");
 
@@ -66,8 +104,8 @@ public class EmailService : IEmailService
         var mailMessage = new MailMessage
         {
             From = new MailAddress(smtpSettings["FromEmail"]),
-            Subject = "Solicitud Cancelada",
-            Body = $"Estimado {e.FirstName} {e.LastName} su solicitud ha sido estudiada y en este caso cancelada. Revise con su Manager las causas. Gracias por su tiempo",
+            Subject = "RRHH || Solicitud Recibida",
+            Body = $"Estimado {e.FirstName} {e.LastName} su solicitud ha sido recibida, recibirá la respuesta de la misma, una vez que su manager la haya revisado",
             IsBodyHtml = true
         };
 
