@@ -151,7 +151,7 @@ namespace RRHH.Application.Services
                     _logger.LogError(result.Error.ToString());
                     return result;
                 }
-
+                //Generamos el token
                 token = _tokensMapper.MapToTokens(token, a, employees);
 
                 await _context.Tokens.AddAsync(token);
