@@ -44,5 +44,15 @@ namespace RRHH.Infrastructure.Repositories
         {
             _context.Entry(employees).State = EntityState.Modified;
         }
+
+        public async Task<List<string>> AllEmailEmployeesAsync()
+        {
+            var emails = await _context.Set<T>()
+                .Where(e => !string.IsNullOrEmpty(e.Email))
+                .Select(e => e.Email)
+                .ToListAsync();
+
+            return emails;
+        }
     }
 }

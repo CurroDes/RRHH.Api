@@ -120,4 +120,46 @@ public class EmailService : IEmailService
             throw new InvalidOperationException("Error al enviar el correo electrónico", ex);
         }
     }
+
+    public async Task<Result> SendEmailToMultipleAsync(List<string> emails, TextDTO t)
+    {
+        Result result = new Result();
+
+        result.IsSuccess = true;
+
+        var smtpSettings = _configuration.GetSection("SmtpSettings");
+
+        var client = new SmtpClient(smtpSettings["Host"])
+        {
+            Port = int.Parse(smtpSettings["Port"]),
+            Credentials = new NetworkCredential(smtpSettings["Username"], smtpSettings["Password"]),
+            EnableSsl = true
+        };
+
+        foreach (var email in emails)
+        {
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(smtpSettings["FromEmail"]),
+                Subject = "RRHH || Correo Masivo",
+                Body = t.ToString(),
+                IsBodyHtml = true
+            };
+
+            mailMessage.To.Add(email);
+
+            try
+            {
+                await client.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                // Manejar errores de forma apropiada (registrar logs, etc.)
+                throw new InvalidOperationException($"Error al enviar correo a {email}", ex);
+            }
+        }
+
+        return result;
+    }
 }

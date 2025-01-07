@@ -15,5 +15,6 @@ namespace RRHH.Domain.Interfaces
         Task<List<T>> GetAllEmployeesAsync();
         Task<T> GetEmployeesEmailAsync(string email);
         Task ModifyEmployees(T employees);
+        Task<List<string>> AllEmailEmployeesAsync();
     }
 }

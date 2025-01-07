@@ -39,6 +39,7 @@ builder.Services.AddScoped<CheckDaysService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<CryptoService>();
 builder.Services.AddScoped<GenerateTokenService>();
+builder.Services.AddScoped<MassMessagingService>();
 
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
