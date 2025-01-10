@@ -40,7 +40,9 @@ builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<CryptoService>();
 builder.Services.AddScoped<GenerateTokenService>();
 builder.Services.AddScoped<MassMessagingService>();
+builder.Services.AddScoped<ReviewsMapper>();
 
+builder.Services.AddScoped<IPerformanceReviewsService ,PerformanceReviewsService>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ILeaveService, LeavesService>();
@@ -52,6 +54,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmployeesRepository<Employee>, EmployeesReposity<Employee>>();
 builder.Services.AddScoped<IDepartmentRepository<Department>, DepartmentRepository<Department>>();
 builder.Services.AddScoped<ILeaveRepository<Leaf>, LeaveRepository<Leaf>>();
+builder.Services.AddScoped<IPerformanceReviewsRepository<PerformanceReview>, PerformanceReviewsRepository<PerformanceReview>>();
 
 // JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

@@ -108,7 +108,6 @@ namespace RRHH.Application.Services
             return result;
         }
 
-
         //TODO: Pendiente logear el personal de RRHH y que obtenga el correspondiente JWT de permiso.
         public async Task<Result> LoginEmployees(int id, AuthApiViewModelDTO a)
         {
