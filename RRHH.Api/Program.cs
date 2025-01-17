@@ -30,6 +30,17 @@ builder.Services.AddDbContext<ApprrhhApiContext>(options =>
 
 builder.Services.AddHttpClient();
 
+// Configuración de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
+
+
+
 // Add services to the container.
 builder.Services.AddScoped<EmployeesMapper>();
 builder.Services.AddScoped<DepartmentMapper>();
@@ -42,7 +53,7 @@ builder.Services.AddScoped<GenerateTokenService>();
 builder.Services.AddScoped<MassMessagingService>();
 builder.Services.AddScoped<ReviewsMapper>();
 
-builder.Services.AddScoped<IPerformanceReviewsService ,PerformanceReviewsService>();
+builder.Services.AddScoped<IPerformanceReviewsService, PerformanceReviewsService>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ILeaveService, LeavesService>();
@@ -93,6 +104,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowAll"); // Habilitar CORS
+
+app.UseAuthentication(); // Asegúrate de incluir la autenticación antes de la autorización
 app.UseAuthorization();
 
 app.MapControllers();

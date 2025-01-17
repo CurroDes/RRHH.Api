@@ -40,7 +40,7 @@ public class PerformanceReviewsService : IPerformanceReviewsService
         {
             result.IsSuccess = true;
             //Comprobamos que es el mismo empleado al que se le está haciendo la revisión.
-            var employee = await _employeesRepository.GetEmployeeByIdAsync(id);
+            var employee = await _employeesRepository.GetEmployeeByIdAsync(p.EmployeeId);
 
             if (employee == null)
             {
