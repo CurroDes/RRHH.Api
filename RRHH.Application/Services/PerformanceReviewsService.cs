@@ -19,15 +19,17 @@ public class PerformanceReviewsService : IPerformanceReviewsService
     private readonly ReviewsMapper _reviewsMapper;
     private readonly IPerformanceReviewsRepository<PerformanceReview> _performanceReviewRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IEmailService _emailService;
 
     public PerformanceReviewsService(IEmployeesRepository<Employee> employeesRepository, ILogger<PerformanceReviewsService> logger,
-        ReviewsMapper reviewsMapper, IPerformanceReviewsRepository<PerformanceReview> performanceReviewsRepository, IUnitOfWork unitOfWork)
+        ReviewsMapper reviewsMapper, IPerformanceReviewsRepository<PerformanceReview> performanceReviewsRepository, IUnitOfWork unitOfWork, IEmailService emailService)
     {
         _employeesRepository = employeesRepository;
         _logger = logger;
         _reviewsMapper = reviewsMapper;
         _performanceReviewRepository = performanceReviewsRepository;
         _unitOfWork = unitOfWork;
+        _emailService = emailService;
     }
 
 
@@ -39,10 +41,12 @@ public class PerformanceReviewsService : IPerformanceReviewsService
         try
         {
             result.IsSuccess = true;
-            //Comprobamos que es el mismo empleado al que se le está haciendo la revisión.
-            var employee = await _employeesRepository.GetEmployeeByIdAsync(p.EmployeeId);
 
-            if (employee == null)
+
+            ////Comprobamos que es el mismo empleado al que se le está haciendo la revisión.
+            var employees = await _employeesRepository.GetEmployeeByIdAsync(id);
+
+            if (employees.Id != p.EmployeeId)
             {
                 result.IsSuccess = false;
                 result.Error = "Error al localizar al empleado para su correspondiente review";
@@ -55,14 +59,16 @@ public class PerformanceReviewsService : IPerformanceReviewsService
 
             var reviewEmployee = _reviewsMapper.MapToReview(p, new PerformanceReview());
 
+
+            //TODO:Llámamos al servicio de mensajería con smtp para notificar al empleado que tiene disponible la revisión en la app de recursos humanos.
+            var message = _emailService.SendEmailReviewsApproved(employees, p);
+
             //Guardamos cambios en bbdd.
             await _performanceReviewRepository.AddReviewAsync(reviewEmployee);
 
             await _unitOfWork.SaveChangesAsync();
 
             await _unitOfWork.CommitAsync();
-            //TODO:Llámamos al servicio de mensajería con smtp para notificar al empleado que tiene disponible la revisión en la app de recursos humanos.
-
 
         }
         catch (Exception ex)
@@ -77,8 +83,6 @@ public class PerformanceReviewsService : IPerformanceReviewsService
 
         return result;
 
-        //Llámamos al servicio de mensajería con smtp para notificar al empleado que tiene disponible la revisión en la app de recursos humanos.
 
-        //aplicamos cambios sobre bbdd y commit.
     }
 }

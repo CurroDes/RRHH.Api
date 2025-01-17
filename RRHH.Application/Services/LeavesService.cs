@@ -89,7 +89,7 @@ public class LeavesService : ILeaveService
 
             var employee = await _employeesRepository.GetEmployeeByIdAsync(l.EmployeeId);
 
-            if(employee == null)
+            if (employee == null)
             {
                 result.IsSuccess = false;
                 result.Error = "No se encontró el empleado asociado a esta solicitud.";

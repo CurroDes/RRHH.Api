@@ -14,5 +14,6 @@ namespace RRHH.Application.Interfaces
         Task<Result> SendEmailAsyncCancel(Employee e);
         Task SendEmailRequest(Employee e);
         Task<Result> SendEmailToMultipleAsync(List<string> emails, TextDTO t);
+        Task SendEmailReviewsApproved(Employee e, PerformanceReviewsDTO p);
     }
 }

@@ -28,7 +28,7 @@ namespace RRHH.Api.Controllers
 
                 if (!result.IsSuccess)
                 {
-                    return StatusCode(500, result.ToString());
+                    return StatusCode(500, result.Error.ToString());
                 }
 
             }

@@ -162,4 +162,75 @@ public class EmailService : IEmailService
 
         return result;
     }
+
+    public async Task SendEmailReviewsApproved(Employee e, PerformanceReviewsDTO p)
+    {
+        var smtpSettings = _configuration.GetSection("SmtpSettings");
+
+        var client = new SmtpClient(smtpSettings["Host"])
+        {
+            Port = int.Parse(smtpSettings["Port"]),
+            Credentials = new NetworkCredential(smtpSettings["Username"], smtpSettings["Password"]),
+            EnableSsl = true
+        };
+
+        var mailMessage = new MailMessage
+        {
+            From = new MailAddress(smtpSettings["FromEmail"]),
+            Subject = "RRHH || Solicitud Aceptada",
+            Body = $@"
+            <html>
+                <head>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            color: #333;
+                            font-size: 14px;
+                        }}
+                        .header {{
+                            color: #4CAF50;
+                            font-size: 18px;
+                            font-weight: bold;
+                        }}
+                        .content {{
+                            margin-top: 20px;
+                            font-size: 16px;
+                        }}
+                        .footer {{
+                            margin-top: 30px;
+                            font-size: 12px;
+                            color: #777;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <p class='header'>Estimado {e.FirstName} {e.LastName},</p>
+                    <p>Le informamos que su rendimiento durante el año ha sido valorado. A continuación, podrá ver los comentarios de su manager:</p>
+                    <div class='content'>
+                        <p><strong>Valoración del Manager:</strong></p>
+                        <p>{p.Comments}</p>
+                    </div><
+                    <div class='footer'>
+                        <p>Atentamente,</p>
+                        <p>El equipo de RRHH</p>
+                    </div>
+                </body>
+            </html>
+        ",
+            IsBodyHtml = true
+        };
+
+        mailMessage.To.Add(e.Email);
+
+        try
+        {
+            await client.SendMailAsync(mailMessage);
+        }
+        catch (Exception ex)
+        {
+            // Maneja el error de forma apropiada
+            throw new InvalidOperationException("Error al enviar el correo electrónico", ex);
+        }
+    }
+
 }
